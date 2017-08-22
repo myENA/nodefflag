@@ -109,14 +109,14 @@ func TestPtrsMatch(t *testing.T) {
 		fv    *float64
 		dv    *time.Duration
 	)
-	fs.NDBoolVar(&bv, "test_bool", "bool value")
-	fs.NDIntVar(&iv, "test_int", "int value")
-	fs.NDInt64Var(&i64v, "test_int64", "int64 value")
-	fs.NDUintVar(&uiv, "test_uint", "uint value")
-	fs.NDUint64Var(&ui64v, "test_uint64", "uint64 value")
-	fs.NDStringVar(&sv, "test_string", "string value")
-	fs.NDFloat64Var(&fv, "test_float64", "float64 value")
-	fs.NDDurationVar(&dv, "test_duration", "time.Duration value")
+	fs.NDBoolVar(&bv, "test_bool", true, "bool value")
+	fs.NDIntVar(&iv, "test_int", 1234, "int value")
+	fs.NDInt64Var(&i64v, "test_int64", int64(4321), "int64 value")
+	fs.NDUintVar(&uiv, "test_uint", uint(5), "uint value")
+	fs.NDUint64Var(&ui64v, "test_uint64", uint64(6), "uint64 value")
+	fs.NDStringVar(&sv, "test_string", "test", "string value")
+	fs.NDFloat64Var(&fv, "test_float64", 123.45, "float64 value")
+	fs.NDDurationVar(&dv, "test_duration", time.Second*30, "time.Duration value")
 
 	_ = fs.Set("test_bool", "true")
 	_ = fs.Set("test_int", "42")
@@ -166,14 +166,14 @@ func TestPtrsMatch(t *testing.T) {
 func TestPtrsMatchDeux(t *testing.T) {
 	fs := NewNDFlagSet("NDflag_test", flag.ExitOnError)
 
-	bv := fs.NDBool("test_bool", "bool value")
-	iv := fs.NDInt("test_int", "int value")
-	i64v := fs.NDInt64("test_int64", "int64 value")
-	uiv := fs.NDUint("test_uint", "uint value")
-	ui64v := fs.NDUint64("test_uint64", "uint64 value")
-	sv := fs.NDString("test_string", "string value")
-	fv := fs.NDFloat64("test_float64", "float64 value")
-	dv := fs.NDDuration("test_duration", "time.Duration value")
+	bv := fs.NDBool("test_bool", true, "bool value")
+	iv := fs.NDInt("test_int", 1234, "int value")
+	i64v := fs.NDInt64("test_int64", int64(4321), "int64 value")
+	uiv := fs.NDUint("test_uint", uint(5), "uint value")
+	ui64v := fs.NDUint64("test_uint64", uint64(6), "uint64 value")
+	sv := fs.NDString("test_string", "test", "string value")
+	fv := fs.NDFloat64("test_float64", 123.45, "float64 value")
+	dv := fs.NDDuration("test_duration", time.Second*30, "time.Duration value")
 
 	_ = fs.Set("test_bool", "true")
 	_ = fs.Set("test_int", "42")
@@ -222,13 +222,13 @@ func TestPtrsMatchDeux(t *testing.T) {
 
 func nfs() *NDFlagSet {
 	fs := NewNDFlagSet("NDflag_test", flag.ExitOnError)
-	fs.NDBool("test_bool", "bool value")
-	fs.NDInt("test_int", "int value")
-	fs.NDInt64("test_int64", "int64 value")
-	fs.NDUint("test_uint", "uint value")
-	fs.NDUint64("test_uint64", "uint64 value")
-	fs.NDString("test_string", "string value")
-	fs.NDFloat64("test_float64", "float64 value")
-	fs.NDDuration("test_duration", "time.Duration value")
+	fs.NDBool("test_bool", true, "bool value")
+	fs.NDInt("test_int", 1234, "int value")
+	fs.NDInt64("test_int64", int64(4321), "int64 value")
+	fs.NDUint("test_uint", uint(5), "uint value")
+	fs.NDUint64("test_uint64", uint64(6), "uint64 value")
+	fs.NDString("test_string", "test", "string value")
+	fs.NDFloat64("test_float64", 123.45, "float64 value")
+	fs.NDDuration("test_duration", time.Second*30, "time.Duration value")
 	return fs
 }

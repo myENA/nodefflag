@@ -18,7 +18,6 @@ package main
 import (
 	"flag"
 	"os"
-	"fmt"
 
 	ndf "github.com/myENA/nodefflag"
 )
@@ -31,8 +30,8 @@ func main() {
 
 	flags := ndf.NewNDFlagSet(os.Args[0], flag.ExitOnError)
 
-	flags.NDBoolVar(&bv, "bool flag", "this is a bool flag")
-	flags.NDStringVar(&sv, "string flag", "this is a string flag")
+	flags.NDBoolVar(&bv, "bool flag", true, "this is a bool flag")
+	flags.NDStringVar(&sv, "string flag", "Example", "this is a string flag")
 
 	flags.Parse(os.Args[1:])
 
