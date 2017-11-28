@@ -181,16 +181,15 @@ func (d *zvdff) Get() interface{} {
 	return *d.dv
 }
 
-// ZVString - returns double string pointer, will reference nil
+// ZVString - returns string pointer, will reference nil
 // string pointer if flag was not set, will reference non-nil otherwise.
-// This allows you to differentiate between the zero val ("") and not set.
 func (ndf *NDFlagSet) ZVString(name, example, usage string) *string {
 	var sv string
 	ndf.ZVStringVar(&sv, name, example, usage)
 	return &sv
 }
 
-// AVStringVar - Similar to AVString, but you supply the double
+// AVStringVar - Similar to AVString, but you supply the
 // string pointer.
 func (ndf *NDFlagSet) ZVStringVar(sv *string, name, example, usage string) {
 	s := &zvsf{sv: sv, example: example}
@@ -205,7 +204,7 @@ func (ndf *NDFlagSet) ZVBool(name string, example bool, usage string) *bool {
 	return &bv
 }
 
-// ZVBoolVar - similar to ZVBool, but you supply the double
+// ZVBoolVar - similar to ZVBool, but you supply the
 // bool pointer.
 func (ndf *NDFlagSet) ZVBoolVar(bv *bool, name string, example bool, usage string) {
 	b := &zvbf{bv: bv, example: strconv.FormatBool(example)}
@@ -246,7 +245,7 @@ func (ndf *NDFlagSet) ZVUint(name string, example uint, usage string) *uint {
 	return &uiv
 }
 
-// ZVUintVar - same as ZVUint, but you supply the double p.
+// ZVUintVar - same as ZVUint, but you supply the pointer.
 func (ndf *NDFlagSet) ZVUintVar(uiv *uint, name string, example uint, usage string) {
 	ui := &zvuif{uiv: uiv, example: strconv.FormatUint(uint64(example), 10)}
 	ndf.Var(ui, name, usage)
