@@ -48,6 +48,46 @@ func TestNils(t *testing.T) {
 		}
 	}
 }
+
+func TestZVs(t *testing.T) {
+	fs := zvs()
+	m := make(map[string]*flag.Flag)
+	visitor := func(f *flag.Flag) {
+		m[f.Name] = f
+		g, ok := f.Value.(flag.Getter)
+		if !ok {
+			t.Errorf("Visit: value does not satisfy Getter: %T", f.Value)
+		}
+		switch f.Name {
+		case "test_bool":
+			ok = g.Get() == false
+		case "test_int":
+			ok = g.Get() == int(0)
+		case "test_int64":
+			ok = g.Get() == int64(0)
+		case "test_uint":
+			ok = g.Get() == uint(0)
+		case "test_uint64":
+			ok = g.Get() == uint64(0)
+		case "test_string":
+			ok = g.Get() == ""
+		case "test_float64":
+			ok = g.Get() == float64(0)
+		case "test_duration":
+			ok = g.Get() == time.Duration(0)
+		}
+		if !ok {
+			t.Errorf("Visit: bad value %T(%v) for %s", g.Get(), g.Get(), f.Name)
+		}
+	}
+	fs.VisitAll(visitor)
+	if len(m) != 8 {
+		t.Error("VisitAll misses some flags")
+		for k, v := range m {
+			t.Log(k, *v)
+		}
+	}
+}
 func TestSet(t *testing.T) {
 	fs := nfs()
 
@@ -94,7 +134,54 @@ func TestSet(t *testing.T) {
 			t.Log(k, *v)
 		}
 	}
+}
 
+func TestZVSet(t *testing.T) {
+	fs := zvs()
+
+	_ = fs.Set("test_bool", "false")
+	_ = fs.Set("test_int", "42")
+	_ = fs.Set("test_int64", "-420")
+	_ = fs.Set("test_uint", "80")
+	_ = fs.Set("test_uint64", "800")
+	_ = fs.Set("test_string", "your ad here")
+	_ = fs.Set("test_float64", "123.45")
+	_ = fs.Set("test_duration", "30s")
+
+	m := make(map[string]*flag.Flag)
+	visitor := func(f *flag.Flag) {
+		m[f.Name] = f
+		var ok bool
+		g := f.Value.(flag.Getter)
+		switch f.Name {
+		case "test_bool":
+			ok = g.Get().(bool) == false
+		case "test_int":
+			ok = g.Get().(int) == 42
+		case "test_int64":
+			ok = g.Get().(int64) == int64(-420)
+		case "test_uint":
+			ok = g.Get().(uint) == uint(80)
+		case "test_uint64":
+			ok = g.Get().(uint64) == uint64(800)
+		case "test_string":
+			ok = g.Get().(string) == "your ad here"
+		case "test_float64":
+			ok = g.Get().(float64) == float64(123.45)
+		case "test_duration":
+			ok = g.Get().(time.Duration).String() == "30s"
+		}
+		if !ok {
+			t.Errorf("Visit: bad value %T(%v) for %s", g.Get(), g.Get(), f.Name)
+		}
+	}
+	fs.Visit(visitor)
+	if len(m) != 8 {
+		t.Error("Visit misses some flags")
+		for k, v := range m {
+			t.Log(k, *v)
+		}
+	}
 }
 
 func TestPtrsMatch(t *testing.T) {
@@ -230,5 +317,18 @@ func nfs() *NDFlagSet {
 	fs.NDString("test_string", "test", "string value")
 	fs.NDFloat64("test_float64", 123.45, "float64 value")
 	fs.NDDuration("test_duration", time.Second*30, "time.Duration value")
+	return fs
+}
+
+func zvs() *NDFlagSet {
+	fs := NewNDFlagSet("ZVflag_test", flag.ExitOnError)
+	fs.ZVBool("test_bool", true, "bool value")
+	fs.ZVInt("test_int", 1234, "int value")
+	fs.ZVInt64("test_int64", int64(4321), "int64 value")
+	fs.ZVUint("test_uint", uint(5), "uint value")
+	fs.ZVUint64("test_uint64", uint64(6), "uint64 value")
+	fs.ZVString("test_string", "test", "string value")
+	fs.ZVFloat64("test_float64", 123.45, "float64 value")
+	fs.ZVDuration("test_duration", time.Second*30, "time.Duration value")
 	return fs
 }
